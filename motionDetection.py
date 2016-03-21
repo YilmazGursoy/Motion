@@ -30,7 +30,7 @@ def main():
 
         if cnts:
             value += 1
-            print "Something moved ", value
+            print "Something movedyjnhjnhjnhjnhjnhjnhj", value
 
         for c in cnts:
             x, y, w, h = cv2.boundingRect(c)
