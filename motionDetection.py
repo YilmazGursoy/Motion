@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 
 def main():
+    counter = 0
     camera = cv2.VideoCapture(0)
     camera.set(3, 640)
     camera.set(4, 480)
@@ -29,9 +30,11 @@ def main():
         cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
 
         if cnts:
-            value += 1
-            print "Something movedyjnhjnhjnhjnhjnhjnhj", value
-
+            print "Hareket kaydedildi!!" , counter
+            cv2.waitKey(2)
+            cv2.imwrite("Images/image%04i.jpg" %counter, image)
+            counter += 1
+        
         for c in cnts:
             x, y, w, h = cv2.boundingRect(c)
 
