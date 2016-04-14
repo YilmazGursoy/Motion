@@ -10,8 +10,8 @@ from tkMessageBox import *
 #Global variables
 width = 800
 height = 600
-emotionList=['Angery','Happy','Sad','Fearful','Suprised','Disgusted', 'Normal']
-dictionaryForCheckEmotions = {"Angery":False, "Happy":False, "Sad": False, "Fearful": False, "Suprised": False, "Disgusted":False, "Normal":False}
+emotionList=['Angry','Happy','Sad','Fearful','Suprised','Disgusted', 'Normal']
+dictionaryForCheckEmotions = {"Angry":False, "Happy":False, "Sad": False, "Fearful": False, "Suprised": False, "Disgusted":False, "Normal":False}
 selectingEmotion = ""
 
 originFolder = os.getcwd()
@@ -46,6 +46,8 @@ def checkPathIsThereIfnCreate():
             folderName = os.path.join(originFolder, directoryName)
             os.mkdir(folderName)
     else:
+        directoryPath.delete(0, END)
+        directoryPath.insert(END, originFolder)
         directoryCheckCreate()
     
         
@@ -56,13 +58,17 @@ def changeDirButtonAction():
         originFolder = directoryPath.get()
         checkPathIsThereIfnCreate()
     else:
-        checkPathIsThereIfnCreate()
+        showinfo("Information", "We didn't changed any thing")
     os.chdir(originFolder)
     
     
 #Fotograflari cekilen ogrencinin cekimi bitiginde siradaki ogrenciye gececek ve file ismi olarak siradaki ogrenci yazacak olan yapi
 
 def StudentPictureDone():
+
+    global dictionaryForCheckEmotions
+    global personNumber
+    global personImageNumber
 
     untakenEmotionList = ""
 
@@ -71,26 +77,25 @@ def StudentPictureDone():
             untakenEmotionList = untakenEmotionList + ", " + controlDictionary
 
     if not untakenEmotionList == "":
-        showinfo("Warning", "Please,take pictures of %s' emotion(s)!"%untakenEmotionList)
+        showwarning("Warning", "Please,take pictures of %s' emotion(s)!"%untakenEmotionList)
 
     else:
         print untakenEmotionList
 
-        global personNumber
-
         personNumber += 1
-
-        global personImageNumber
 
         personImageNumber = 0
 
         entryUserID.delete(0, 'end')
+        
+        dictionaryForCheckEmotions = {"Angry":False, "Happy":False, "Sad": False, "Fearful": False, "Suprised": False, "Disgusted":False, "Normal":False}
+
 
 # Ogrencinin kacinci fotografini cektigini belirten ve bu fotograflari kaydeden fonksiyon
 def takePicturePressed():
     global selectingEmotion
     if entryUserID.get() == '':
-        showinfo("Uyari", "Lutfen UserID' yi bos birakmayiniz!")
+        showwarning("User ID is empty", "Please, fill the UserID!")
     else:
         global personImageNumber
 
@@ -140,7 +145,7 @@ root.resizable(width = False, height = False)
 emotionListBox = Listbox(root, width = 11, height = 4, font = ('times',13))
 emotionListBox.bind('<<ListboxSelect>>',CurSelect)
 for items in emotionList:
-    emotionListBox.insert(END,items)
+    emotionListBox.insert(END, items)
 emotionListBox.place(x = 97, y = 512)
 
 
@@ -172,7 +177,7 @@ labelUserID.place(x = 525,y = 538)
 entryUserID = Entry(root, bd = 3)
 entryUserID.place(x = 595, y = 536)
 
-userIDDoneButton = Button(root, text = "Tamam", command = UserIDDoneButtonPressed)
+userIDDoneButton = Button(root, text = "Done", command = UserIDDoneButtonPressed)
 userIDDoneButton.place(x = 610, y = 570)
 
 
