@@ -12,7 +12,7 @@ def main():
     camera.set(4, 480)
     
     newMotion = False
-
+    timer = 50
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     dateNow = datetime.datetime.now()
@@ -39,13 +39,14 @@ def main():
         cv2.accumulateWeighted(blur, initial_frame, 0.5)
         frame_diff = cv2.absdiff(blur, cv2.convertScaleAbs(initial_frame))
 
-        thresh = cv2.threshold(frame_diff, 10, 255, cv2.THRESH_BINARY)[1]
+        thresh = cv2.threshold(frame_diff, 5, 255, cv2.THRESH_BINARY)[1]
         thresh = cv2.dilate(thresh, None, iterations=2)
 
         _, cnts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
 
         if cnts:
+	    timer = 50
 	    if counter is 0:
 	        newMotion = True
 	    if newMotion:
@@ -60,8 +61,12 @@ def main():
             out.write(image)
             counter += 1
         else:
-	    newMotion = True      
-            
+	    if timer is not 0:     
+                timer -= 1
+                out.write(image)
+            else:
+	        newMotion = True
+	        counter = 0
         
         
         for c in cnts:
